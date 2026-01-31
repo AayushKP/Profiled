@@ -49,11 +49,11 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Profiled Team" }],
   creator: "Profiled",
-  metadataBase: new URL("https://profiled.app"),
+  metadataBase: new URL("https://profiled.site"),
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://profiled.app",
+    url: "https://profiled.site",
     title: "Profiled | Build Your Professional Portfolio",
     description:
       "Create a stunning, minimal portfolio that stands out. Get your own subdomain, beautiful design, and easy editing.",
