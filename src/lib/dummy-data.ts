@@ -37,7 +37,7 @@ export const dummyPortfolio: Partial<Portfolio> = {
     email: "kashyaapayush26@gmail.com",
     twitter: "https://x.com/aayuk_5183",
     resume: "https://drive.google.com/file/d/1oRbgMiDWLJdVpa8Ne26X6wXhcHPqukOO",
-    website: "https://kasshyap.dev",
+    website: "https://kashyaap.dev",
   },
   experience: [
     {
