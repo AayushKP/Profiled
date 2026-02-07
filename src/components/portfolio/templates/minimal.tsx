@@ -777,7 +777,7 @@ export function PortfolioTemplate({
                       className="mx-4 flex h-32 w-40 flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[#0e0e0e]/80 transition-all hover:border-white/10 hover:bg-white/5"
                     >
                       <Icon className="h-8 w-8" style={{ color }} />
-                      <span className="text-sm font-light text-neutral-400 capitalize">
+                      <span className="text-sm font-light text-neutral-400 capitalize text-center px-2">
                         {skill}
                       </span>
                     </div>
@@ -804,7 +804,7 @@ export function PortfolioTemplate({
                         className="mx-4 flex h-32 w-40 flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[#0e0e0e]/80 transition-all hover:border-white/10 hover:bg-white/5"
                       >
                         <Icon className="h-8 w-8" style={{ color }} />
-                        <span className="text-sm font-light text-neutral-400 capitalize">
+                        <span className="text-sm font-light text-neutral-400 capitalize text-center px-2">
                           {skill}
                         </span>
                       </div>
