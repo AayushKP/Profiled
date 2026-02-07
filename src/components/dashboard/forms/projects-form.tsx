@@ -266,6 +266,19 @@ export function ProjectsForm({ portfolio, onUpdate }: ProjectsFormProps) {
               />
             </div>
 
+            <div className="space-y-2">
+              <Label>Project Image URL</Label>
+              <Input
+                value={editingProject?.image || ""}
+                onChange={(e) =>
+                  setEditingProject((prev) =>
+                    prev ? { ...prev, image: e.target.value } : null,
+                  )
+                }
+                placeholder="https://..."
+              />
+            </div>
+
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label>GitHub URL</Label>
