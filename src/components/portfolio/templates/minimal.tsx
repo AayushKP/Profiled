@@ -573,7 +573,7 @@ export function PortfolioTemplate({
       {/* Edit Button */}
       {isPreview && (
         <div className="fixed bottom-6 right-6 z-50">
-          <Link href={isLoggedIn ? "/dashboard" : "/signup"}>
+          <Link href={isLoggedIn ? "/dashboard" : "/"}>
             <button className="flex items-center gap-2 rounded-full border border-white/10 bg-[#111] px-6 py-3 text-sm font-medium text-white shadow-xl backdrop-blur-md transition-all hover:bg-white hover:text-black">
               {isLoggedIn ? "Edit Portfolio" : "Create Your Own"}
             </button>
