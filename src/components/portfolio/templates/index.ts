@@ -1,5 +1,6 @@
 import { PortfolioTemplate } from "./minimal";
 import { TerminalTemplate } from "./terminal";
+import { LuminalTemplate } from "./luminal";
 import type { Portfolio } from "@/db/schema";
 
 // Shared props interface for all portfolio templates
@@ -9,34 +10,43 @@ export interface PortfolioTemplateProps {
   isLoggedIn?: boolean;
 }
 
+// Template configuration interface
 export interface TemplateConfig {
   id: string;
   name: string;
-  description?: string;
-  component: React.ComponentType<PortfolioTemplateProps>;
-  thumbnailColor?: string;
+  description: string;
+  component: React.ComponentType<any>;
+  thumbnailColor: string;
 }
 
+// Registry of all available templates
 export const PORTFOLIO_TEMPLATES: TemplateConfig[] = [
   {
-    id: "minimal", // Matches default "minimal" in schema
+    id: "minimal",
     name: "Minimal",
-    description: "A clean, dark-mode focused template for developers.",
+    description: "A clean, typography-focused template perfect for developers.",
     component: PortfolioTemplate,
-    thumbnailColor: "#050505", // Black background as requested
+    thumbnailColor: "#f5f5f5",
   },
   {
     id: "terminal",
     name: "Terminal",
-    description: "A developer-first command line interface portfolio.",
+    description: "A command-line inspired theme for the hardcore hackers.",
     component: TerminalTemplate,
     thumbnailColor: "#111111",
+  },
+  {
+    id: "luminal",
+    name: "Luminal",
+    description: "A sleek, responsive dual-mode template.",
+    component: LuminalTemplate,
+    thumbnailColor: "#ffffff",
   },
 ];
 
 export const getTemplate = (id: string | null | undefined) => {
+  if (!id) return PORTFOLIO_TEMPLATES[0];
   return (
-    PORTFOLIO_TEMPLATES.find((t) => t.id === (id || "minimal")) ||
-    PORTFOLIO_TEMPLATES[0]
+    PORTFOLIO_TEMPLATES.find((t) => t.id === id) || PORTFOLIO_TEMPLATES[0]
   );
 };
