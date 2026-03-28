@@ -4,7 +4,6 @@ import { TrustedBy } from "@/components/landing/trusted-by";
 import { Features } from "@/components/landing/features";
 import { Testimonials } from "@/components/landing/testimonials";
 import { HowItWorks } from "@/components/landing/how-it-works";
-import { Pricing } from "@/components/landing/pricing";
 import { CTA } from "@/components/landing/cta";
 import { Footer } from "@/components/landing/footer";
 
