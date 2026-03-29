@@ -73,6 +73,7 @@ export async function POST(req: NextRequest) {
       {
         "fullName": "string",
         "email": "string",
+        "location": "string (Extract City/State/Country. Return empty if none)",
         "title": "string",
         "tagline": "string (max 100 chars)",
         "bio": "string (STRICTLY approx 20-25 words)",
