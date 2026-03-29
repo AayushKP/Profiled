@@ -123,6 +123,7 @@ export const portfolio = pgTable("portfolio", {
   education: json("education").$type<EducationData[]>().default([]),
   blogs: json("blogs").$type<BlogData[]>().default([]),
   socialLinks: json("social_links").$type<SocialLinksData>().default({}),
+  showGithubHeatmap: boolean("show_github_heatmap").default(true),
   theme: text("theme").default("minimal"),
   isPublished: boolean("is_published").default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),

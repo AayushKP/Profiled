@@ -820,13 +820,15 @@ export function PortfolioTemplate({
       {/* About Section Removed - Merged into Hero */}
 
       {/* Heatmap Section */}
-      <section className="pb-20 pt-10">
-        <div className="mx-auto max-w-6xl w-full px-6 md:px-10 overflow-x-auto md:overflow-visible">
-          <div className="min-w-[700px] md:min-w-0 origin-left scale-75 md:scale-100 transform transition-transform">
-            <RealHeatmap username={socialLinks.github} />
+      {mergedPortfolio.showGithubHeatmap !== false && (
+        <section className="pb-20 pt-10">
+          <div className="mx-auto max-w-6xl w-full px-6 md:px-10 overflow-x-auto md:overflow-visible">
+            <div className="min-w-[700px] md:min-w-0 origin-left scale-75 md:scale-100 transform transition-transform">
+              <RealHeatmap username={socialLinks.github} />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Projects Section - Removed Bold */}
       <section id="projects" className="py-24 bg-[#080808]">

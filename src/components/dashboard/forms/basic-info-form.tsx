@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Switch } from "@/components/ui/switch";
 import { debounce } from "@/lib/utils";
 import { ResumeImportButton } from "@/components/dashboard/resume-import-button";
 import type { Portfolio } from "@/db/schema";
@@ -120,19 +121,31 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
       </div>
 
       <div className="space-y-6">
-        {/* Profile Image */}
-        <div className="flex items-center gap-6">
-          <Avatar className="h-20 w-20">
-            <AvatarImage src={portfolio.profileImage || undefined} />
-            <AvatarFallback className="bg-amber-500/20 text-2xl text-amber-500">
-              {fullName?.charAt(0)?.toUpperCase() || "U"}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="text-sm font-medium text-white">Profile Image</p>
-            <p className="text-xs text-gray-500">
-              Profile image is synced from your Google account
-            </p>
+        {/* Profile Image & Heatmap Toggle */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div className="flex items-center gap-6">
+            <Avatar className="h-20 w-20">
+              <AvatarImage src={portfolio.profileImage || undefined} />
+              <AvatarFallback className="bg-amber-500/20 text-2xl text-amber-500">
+                {fullName?.charAt(0)?.toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-medium text-white">Profile Image</p>
+              <p className="text-xs text-gray-500">
+                Profile image is synced from your Google account
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:items-end gap-2 p-4 rounded-lg border border-white/5 bg-[#111]">
+            <Label className="text-sm font-medium text-white">GitHub Heatmap</Label>
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-gray-400">Show contribution graph</span>
+              <Switch
+                checked={portfolio.showGithubHeatmap ?? true}
+                onCheckedChange={(checked) => onUpdate({ showGithubHeatmap: checked })}
+              />
+            </div>
           </div>
         </div>
 
