@@ -89,17 +89,23 @@ export const portfolioSchema = z.object({
   education: z.array(educationSchema),
   blogs: z.array(blogSchema).optional(),
   socialLinks: socialLinksSchema,
+  showGithubHeatmap: z.boolean().default(true),
   theme: z.string().default("minimal"),
   isPublished: z.boolean().default(false),
 });
 
 // Partial schema for PATCH updates - all fields optional
 export const portfolioUpdateSchema = portfolioSchema
-  .partial()
   .omit({
-    // These fields should never be updated via API
+    theme: true,
+    isPublished: true,
+    showGithubHeatmap: true,
   })
+  .partial()
   .extend({
+    theme: z.string().optional(),
+    isPublished: z.boolean().optional(),
+    showGithubHeatmap: z.boolean().optional(),
     // Allow partial nested updates
     socialLinks: socialLinksSchema.partial().optional(),
   });
