@@ -107,9 +107,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={`${GeistSans.variable} ${GeistMono.variable} ${inter.variable} ${playfair.variable} ${cormorant.variable} ${instrumentSerif.variable} min-h-screen bg-[#050505] font-sans antialiased selection:bg-amber-500/30 selection:text-amber-500`}
+        suppressHydrationWarning
       >
         <QueryProvider>{children}</QueryProvider>
         <Toaster />
