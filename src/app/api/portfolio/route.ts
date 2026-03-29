@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
         username,
         fullName: session.user.name || "",
         email: session.user.email,
-        profileImage: session.user.image || undefined,
+        profileImage: undefined,
         skills: [],
         projects: [],
         experience: [],

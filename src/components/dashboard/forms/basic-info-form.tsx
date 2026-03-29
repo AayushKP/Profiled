@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Check, X, Loader2, FileText, ExternalLink } from "lucide-react";
+import { Check, X, Loader2, FileText, ExternalLink, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -11,6 +11,8 @@ import { Switch } from "@/components/ui/switch";
 import { debounce } from "@/lib/utils";
 import { ResumeImportButton } from "@/components/dashboard/resume-import-button";
 import type { Portfolio } from "@/db/schema";
+import { toast } from "sonner";
+import { useRef } from "react";
 
 interface BasicInfoFormProps {
   portfolio: Portfolio;
@@ -29,6 +31,55 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
     "idle" | "checking" | "available" | "taken" | "invalid"
   >("idle");
   const [usernameError, setUsernameError] = useState("");
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUploadingImage(true);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+      const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
+      if (!cloudName || !uploadPreset) {
+        toast.error(
+          "Cloudinary credentials not configured. Please add NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME and NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET to your environment variables.",
+        );
+        setIsUploadingImage(false);
+        return;
+      }
+
+      formData.append("upload_preset", uploadPreset);
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      if (!res.ok) throw new Error("Upload failed");
+
+      const data = await res.json();
+      const imageUrl = data.secure_url;
+
+      onUpdate({ profileImage: imageUrl });
+      toast.success("Profile image updated");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to upload image.");
+    } finally {
+      setIsUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   // Check username availability
   const checkUsername = useCallback(
@@ -124,26 +175,51 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
         {/* Profile Image & Heatmap Toggle */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-center gap-6">
-            <Avatar className="h-20 w-20">
-              <AvatarImage src={portfolio.profileImage || undefined} />
-              <AvatarFallback className="bg-amber-500/20 text-2xl text-amber-500">
-                {fullName?.charAt(0)?.toUpperCase() || "U"}
-              </AvatarFallback>
-            </Avatar>
+            <div
+              className="relative group cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Avatar className="h-20 w-20 transition-opacity group-hover:opacity-50">
+                <AvatarImage src={portfolio.profileImage || undefined} />
+                <AvatarFallback className="bg-amber-500/20 text-2xl text-amber-500">
+                  {fullName?.charAt(0)?.toUpperCase() || "U"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                {isUploadingImage ? (
+                  <Loader2 className="h-6 w-6 animate-spin text-white" />
+                ) : (
+                  <Plus className="h-8 w-8 text-white drop-shadow-md" />
+                )}
+              </div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
+            </div>
             <div>
               <p className="text-sm font-medium text-white">Profile Image</p>
               <p className="text-xs text-gray-500">
-                Profile image is synced from your Google account
+                Click the + to upload a custom profile picture
               </p>
             </div>
           </div>
           <div className="flex flex-col sm:items-end gap-2 p-4 rounded-lg border border-white/5 bg-[#111]">
-            <Label className="text-sm font-medium text-white">GitHub Heatmap</Label>
+            <Label className="text-sm font-medium text-white">
+              GitHub Heatmap
+            </Label>
             <div className="flex items-center gap-3">
-              <span className="text-xs text-gray-400">Show contribution graph</span>
+              <span className="text-xs text-gray-400">
+                Show contribution graph
+              </span>
               <Switch
                 checked={portfolio.showGithubHeatmap ?? true}
-                onCheckedChange={(checked) => onUpdate({ showGithubHeatmap: checked })}
+                onCheckedChange={(checked) =>
+                  onUpdate({ showGithubHeatmap: checked })
+                }
               />
             </div>
           </div>
