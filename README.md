@@ -1,16 +1,18 @@
 # Profiled - Build Your Portfolio in Minutes
 
-A complete Portfolio Builder SaaS application with custom subdomains featuring a minimal, elegant portfolio template. Built with Next.js 16, Better Auth, PostgreSQL (Supabase), and Drizzle ORM.
+A complete Portfolio Builder SaaS application with custom subdomains, multiple portfolio templates, AI-assisted resume import, and Cloudinary-based image uploads. Built with Next.js 16, Better Auth, PostgreSQL (Supabase), and Drizzle ORM.
 
 ## Features
 
-- **Beautiful Minimal Design** - Stand out with elegant typography and sophisticated design
+- **Multiple Portfolio Templates** - Choose from Minimal, Terminal, and Luminal themes
 - **Custom Subdomain** - Get yourname.profiled.site instantly
 - **Easy Editing** - Update your portfolio anytime from your dashboard
 - **Mobile Responsive** - Perfect on all devices
 - **Google OAuth** - Quick and secure authentication
 - **Auto-Save** - Your changes are saved automatically
 - **Real-time Username Validation** - Check username availability instantly
+- **Cloudinary Image Uploads** - Upload and update profile images directly from dashboard
+- **Location Support** - Add your city/state/country in profile details
 - **GitHub Activity Heatmap** - Showcase your contributions
 - **Blog Section** - Share your thoughts and articles
 - **Experience Timeline** - Display your work history beautifully
@@ -21,6 +23,7 @@ A complete Portfolio Builder SaaS application with custom subdomains featuring a
 - **Database**: PostgreSQL via Supabase
 - **ORM**: Drizzle ORM
 - **Auth**: Better Auth v1 with Google OAuth
+- **Media Storage**: Cloudinary (unsigned upload preset)
 - **Styling**: Tailwind CSS v4 + Framer Motion
 - **Fonts**: Playfair Display, Cormorant Garamond, Inter, Geist, Instrument Serif
 - **Components**: Custom shadcn/ui-style components
@@ -34,6 +37,7 @@ A complete Portfolio Builder SaaS application with custom subdomains featuring a
 - Supabase PostgreSQL database
 - Google OAuth credentials
 - Gemini API Key (for AI features)
+- Cloudinary account (for profile image upload)
 
 ### Environment Variables
 
@@ -59,7 +63,13 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 # App URLs
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_DOMAIN=localhost:3000
+
+# Cloudinary (Profile Image Upload)
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your-cloud-name
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your-unsigned-upload-preset
 ```
+
+> You can also copy from [env.example](env.example) and fill in your values.
 
 ### Installation
 
@@ -180,6 +190,18 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 - Accessibility improvements
 - New features (please open an issue first to discuss)
 
+### Current Built-in Templates
+
+- **Minimal** — Clean, typography-focused style
+- **Terminal** — Command-line inspired developer aesthetic
+- **Luminal** — Sleek modern dual-mode style
+
+Template preview routes:
+
+- `/preview/minimal`
+- `/preview/terminal`
+- `/preview/luminal`
+
 ### Contributing a New Template
 
 Want to create a new portfolio template? Follow these steps:
@@ -217,6 +239,7 @@ export function YourTemplateName({
   const {
     fullName = "Your Name",
     title = "Your Title",
+    location,
     bio,
     tagline,
     skills,
@@ -226,6 +249,7 @@ export function YourTemplateName({
     socialLinks,
     profileImage,
     blogs,
+    showGithubHeatmap,
   } = portfolio;
 
   return (
@@ -287,19 +311,21 @@ Your template should include:
 
 Your template receives this data from the `portfolio` prop:
 
-| Field          | Type           | Description        |
-| -------------- | -------------- | ------------------ |
-| `fullName`     | `string`       | User's full name   |
-| `title`        | `string`       | Professional title |
-| `tagline`      | `string`       | Short tagline      |
-| `bio`          | `string`       | About section text |
-| `profileImage` | `string`       | Profile image URL  |
-| `skills`       | `string[]`     | List of skills     |
-| `projects`     | `Project[]`    | Array of projects  |
-| `experience`   | `Experience[]` | Work experience    |
-| `education`    | `Education[]`  | Education history  |
-| `blogs`        | `Blog[]`       | Blog posts         |
-| `socialLinks`  | `object`       | Social media links |
+| Field               | Type           | Description                      |
+| ------------------- | -------------- | -------------------------------- |
+| `fullName`          | `string`       | User's full name                 |
+| `title`             | `string`       | Professional title               |
+| `location`          | `string`       | City/State/Country               |
+| `tagline`           | `string`       | Short tagline                    |
+| `bio`               | `string`       | About section text               |
+| `profileImage`      | `string`       | Profile image URL                |
+| `skills`            | `string[]`     | List of skills                   |
+| `projects`          | `Project[]`    | Array of projects                |
+| `experience`        | `Experience[]` | Work experience                  |
+| `education`         | `Education[]`  | Education history                |
+| `blogs`             | `Blog[]`       | Blog posts                       |
+| `socialLinks`       | `object`       | Social media links               |
+| `showGithubHeatmap` | `boolean`      | Toggle GitHub contribution graph |
 
 #### 6. Testing Your Template
 
@@ -331,8 +357,10 @@ src/
 │   ├── api/
 │   │   ├── auth/[...all]/        # Better Auth routes
 │   │   ├── check-username/       # Username availability check
+│   │   ├── fetch-metadata/       # Extract OG metadata from links
 │   │   ├── portfolio/            # Portfolio CRUD operations
-│   │   └── portfolio/publish/    # Publish/unpublish portfolio
+│   │   ├── portfolio/publish/    # Publish/unpublish portfolio
+│   │   └── resume/analyze/       # AI resume parser (PDF -> portfolio JSON)
 │   ├── dashboard/                # Portfolio editor dashboard
 │   │   └── preview/              # Dashboard preview
 │   ├── portfolio/[username]/     # Public portfolio pages
