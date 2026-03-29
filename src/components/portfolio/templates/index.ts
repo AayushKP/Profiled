@@ -26,7 +26,7 @@ export const PORTFOLIO_TEMPLATES: TemplateConfig[] = [
     name: "Minimal",
     description: "A clean, typography-focused template perfect for developers.",
     component: PortfolioTemplate,
-    thumbnailColor: "#f5f5f5",
+    thumbnailColor: "#111111",
   },
   {
     id: "terminal",
@@ -40,13 +40,11 @@ export const PORTFOLIO_TEMPLATES: TemplateConfig[] = [
     name: "Luminal",
     description: "A sleek, responsive dual-mode template.",
     component: LuminalTemplate,
-    thumbnailColor: "#ffffff",
+    thumbnailColor: "#111111",
   },
 ];
 
 export const getTemplate = (id: string | null | undefined) => {
   if (!id) return PORTFOLIO_TEMPLATES[0];
-  return (
-    PORTFOLIO_TEMPLATES.find((t) => t.id === id) || PORTFOLIO_TEMPLATES[0]
-  );
+  return PORTFOLIO_TEMPLATES.find((t) => t.id === id) || PORTFOLIO_TEMPLATES[0];
 };
