@@ -117,6 +117,10 @@ const HELP_DATA: HelpNode[] = [
                 <strong>Terminal:</strong> A hacker-style, mono-spaced theme for
                 developers.
               </li>
+              <li>
+                <strong>Luminal:</strong> A sleek, responsive dual-mode
+                template.
+              </li>
             </ul>
             More templates are coming very soon!
           </span>
