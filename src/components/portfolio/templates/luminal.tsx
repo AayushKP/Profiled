@@ -14,6 +14,8 @@ import {
   ArrowUpRight,
   Package,
   Briefcase,
+  Linkedin,
+  Globe,
 } from "lucide-react";
 import { ActivityCalendar } from "react-activity-calendar";
 import { useSession } from "@/lib/auth-client";
@@ -274,6 +276,44 @@ const PREMIUM_ACCENTS = [
   },
 ];
 
+const CyberAvatarPlaceholder = () => (
+  <div className="absolute inset-0 w-full h-full bg-[#0c0c0c] z-0 flex items-center justify-center overflow-hidden">
+    {/* Premium technical diagonal stripes */}
+    <div
+      className="absolute inset-0 opacity-[0.4]"
+      style={{
+        background:
+          "repeating-linear-gradient(-45deg, #1a1a1a, #1a1a1a 1px, transparent 1px, transparent 6px)",
+      }}
+    />
+    
+    {/* Soft central glow */}
+    <div className="absolute inset-0 bg-linear-to-br from-neutral-500/10 to-transparent opacity-40 z-0" />
+    <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.9)] z-0" />
+
+    {/* Abstract Premium Human Silhouette */}
+    <div className="relative z-10 w-12 h-12 md:w-16 md:h-16 opacity-70 group-hover:opacity-100 transition-opacity duration-500">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-neutral-300 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]">
+        <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" strokeWidth="1" strokeLinecap="square" />
+        <path d="M20.59 22C20.59 18.13 16.74 15 12 15C7.26 15 3.41 18.13 3.41 22" stroke="currentColor" strokeWidth="1" strokeLinecap="square" strokeDasharray="2 2" />
+      </svg>
+      {/* Glitch/Scan overlays */}
+      <div className="absolute inset-0 bg-white/5 animate-pulse mix-blend-overlay" />
+    </div>
+
+    {/* Technical Crosshairs framing the head */}
+    <div className="absolute top-[20%] left-[20%] w-2 h-2 border-t border-l border-neutral-500/50" />
+    <div className="absolute top-[20%] right-[20%] w-2 h-2 border-t border-r border-neutral-500/50" />
+    <div className="absolute bottom-[20%] left-[20%] w-2 h-2 border-b border-l border-neutral-500/50" />
+    <div className="absolute bottom-[20%] right-[20%] w-2 h-2 border-b border-r border-neutral-500/50" />
+
+    {/* User Tag */}
+    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 font-mono text-[7px] md:text-[8px] tracking-[0.2em] text-neutral-500">
+      USR.ID.01
+    </div>
+  </div>
+);
+
 const CoolProjectPlaceholder = ({
   title,
   index = 0,
@@ -289,7 +329,7 @@ const CoolProjectPlaceholder = ({
     >
       {/* Premium technical diagonal stripes */}
       <div
-        className="absolute inset-0 opacity-[0.2]"
+        className="absolute inset-0 opacity-[0.5]"
         style={{
           background:
             "repeating-linear-gradient(-45deg, #1a1a1a, #1a1a1a 1px, transparent 1px, transparent 6px)",
@@ -342,6 +382,18 @@ const CoolProjectPlaceholder = ({
   );
 };
 
+// --- Clock Widget ---
+const ClockWidget = () => {
+  const [currentTime, setCurrentTime] = useState("");
+  useEffect(() => {
+    const updateTime = () => setCurrentTime(new Date().toLocaleTimeString());
+    updateTime();
+    const intv = setInterval(updateTime, 1000);
+    return () => clearInterval(intv);
+  }, []);
+  return <span>{currentTime || "12:00:00 AM"}</span>;
+};
+
 // === Main Template ===
 export function LuminalTemplate({
   portfolio,
@@ -365,19 +417,7 @@ export function LuminalTemplate({
     socialLinks = {},
   } = mergedPortfolio as any;
 
-  const avatarImage =
-    profileImage ||
-    session?.user?.image ||
-    "https://api.dicebear.com/9.x/notionists/svg?seed=Felix";
-
-  const [currentTime, setCurrentTime] = useState("");
-
-  useEffect(() => {
-    const updateTime = () => setCurrentTime(new Date().toLocaleTimeString());
-    updateTime();
-    const intv = setInterval(updateTime, 1000);
-    return () => clearInterval(intv);
-  }, []);
+  const avatarImage = profileImage || session?.user?.image;
 
   // Make 2 rows of skills
   const halfSkills = Math.ceil(skills.length / 2);
@@ -401,12 +441,15 @@ export function LuminalTemplate({
         <div className="mx-auto w-[92%] md:w-full max-w-[800px] py-10 md:py-14 flex flex-col gap-9">
           {/* Profile Header */}
           <section className="flex flex-col md:flex-row gap-6 items-start">
-            <div className="w-28 h-28 md:w-36 md:h-36 shrink-0 border-2 border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors rounded-none overflow-hidden shadow-sm">
-              <img
-                src={avatarImage}
-                alt={fullName}
-                className="w-full h-full object-cover"
-              />
+            <div className="relative group w-28 h-28 md:w-36 md:h-36 shrink-0 border-2 border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors rounded-none overflow-hidden shadow-sm bg-white dark:bg-[#111]">
+              <CyberAvatarPlaceholder />
+              {avatarImage && (
+                <img
+                  src={avatarImage}
+                  alt={fullName}
+                  className="relative z-10 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
+                />
+              )}
             </div>
 
             <div className="flex flex-col gap-1.5 pt-1">
@@ -424,12 +467,15 @@ export function LuminalTemplate({
                 </span>
               </div>
               <div className="flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400 mt-2 font-mono">
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4" /> India
-                </div>
+                {(mergedPortfolio.location || "India") && (
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4" />{" "}
+                    {mergedPortfolio.location || "India"}
+                  </div>
+                )}
                 <span>·</span>
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4" /> {currentTime || "12:00:00 AM"}
+                  <Clock className="w-4 h-4" /> <ClockWidget />
                 </div>
               </div>
             </div>
@@ -455,11 +501,24 @@ export function LuminalTemplate({
               </a>
             )}
 
+            {socialLinks?.linkedin && (
+              <a
+                href={socialLinks.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-1.5 px-4 py-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none text-sm font-bold bg-white dark:bg-[#111]"
+              >
+                <Linkedin className="w-3.5 h-3.5" /> LinkedIn
+              </a>
+            )}
+
             {socialLinks?.email && (
               <>
-                <span className="text-[11px] font-mono text-neutral-400 uppercase font-bold">
-                  OR
-                </span>
+                {(socialLinks?.twitter || socialLinks?.linkedin) && (
+                  <span className="text-[11px] font-mono text-neutral-400 uppercase font-bold">
+                    OR
+                  </span>
+                )}
                 <a
                   href={"mailto:" + socialLinks.email}
                   className="flex items-center gap-1.5 px-4 py-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none text-sm font-bold bg-white dark:bg-[#111]"
@@ -469,7 +528,7 @@ export function LuminalTemplate({
               </>
             )}
 
-            <div className="w-px h-6 bg-neutral-200 dark:bg-neutral-800 hidden md:block" />
+            <div className="w-px h-6 bg-neutral-200 dark:bg-neutral-800 hidden md:block mx-1" />
 
             {socialLinks?.github && (
               <a
@@ -477,8 +536,20 @@ export function LuminalTemplate({
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-center p-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none bg-white dark:bg-[#111]"
+                title="GitHub"
               >
                 <Github className="w-4 h-4" />
+              </a>
+            )}
+            {socialLinks?.website && (
+              <a
+                href={socialLinks.website}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center p-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none bg-white dark:bg-[#111]"
+                title="Personal Website"
+              >
+                <Globe className="w-4 h-4" />
               </a>
             )}
             {socialLinks?.resume && (
@@ -487,6 +558,7 @@ export function LuminalTemplate({
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-center p-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none bg-white dark:bg-[#111]"
+                title="Download Resume"
               >
                 <Download className="w-4 h-4" />
               </a>
@@ -594,7 +666,7 @@ export function LuminalTemplate({
                 ))}
               </div>
 
-              {socialLinks?.github && (
+              {socialLinks?.github && mergedPortfolio.showGithubHeatmap !== false && (
                 <RealHeatmap username={socialLinks.github} />
               )}
             </section>
@@ -697,6 +769,14 @@ export function LuminalTemplate({
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-3">
+                {socialLinks?.email && (
+                  <a
+                    href={"mailto:" + socialLinks.email}
+                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
+                  >
+                    <Mail className="w-4 h-4" /> Email
+                  </a>
+                )}
                 {socialLinks?.twitter && (
                   <a
                     href={socialLinks.twitter}
