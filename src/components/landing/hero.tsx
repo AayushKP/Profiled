@@ -19,6 +19,7 @@ import {
   Check,
   Terminal,
   LayoutTemplate,
+  Sparkles,
 } from "lucide-react";
 import React, { useState } from "react";
 import { AuthModal } from "@/components/auth/auth-modal";
@@ -33,9 +34,9 @@ export function Hero() {
   const y = useTransform(scrollY, [0, 500], [0, 0]);
   const rotateX = useTransform(scrollY, [0, 500], [0, 0]);
   const [authOpen, setAuthOpen] = useState(false);
-  const [activePreview, setActivePreview] = useState<"minimal" | "terminal">(
-    "minimal",
-  );
+  const [activePreview, setActivePreview] = useState<
+    "minimal" | "terminal" | "luminal"
+  >("minimal");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPreviewDropdownOpen, setIsPreviewDropdownOpen] = useState(false);
 
@@ -132,7 +133,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="font-instrument text-base md:text-lg text-neutral-400 max-w-2xl leading-relaxed mb-8 md:mb-10 backdrop-blur-sm"
+              className="font-instrument text-base md:text-lg text-neutral-400 max-w-3xl leading-relaxed mb-8 md:mb-10 backdrop-blur-sm"
             >
               We help you design and build portfolios that drive results and
               help your career grow. No styling headaches. Just results.
@@ -212,6 +213,21 @@ export function Hero() {
                       >
                         <Terminal className="w-3.5 h-3.5 group-hover:text-[#4ade80] transition-colors" />
                         <span>Terminal</span>
+                        <ArrowRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setActivePreview("luminal");
+                          setIsPreviewDropdownOpen(false);
+                          window.open("/preview/luminal", "_blank");
+                        }}
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors w-full text-left font-mono group",
+                          "text-neutral-400 hover:bg-white/5 hover:text-white",
+                        )}
+                      >
+                        <Sparkles className="w-3.5 h-3.5 group-hover:text-[#a855f7] transition-colors" />
+                        <span>Luminal</span>
                         <ArrowRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                       </button>
                     </motion.div>
@@ -332,6 +348,24 @@ export function Hero() {
                             <Check className="w-3 h-3 ml-auto text-[#d4a373]" />
                           )}
                         </button>
+                        <button
+                          onClick={() => {
+                            setActivePreview("luminal");
+                            setIsDropdownOpen(false);
+                          }}
+                          className={cn(
+                            "flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors w-full text-left font-mono",
+                            activePreview === "luminal"
+                              ? "bg-white/10 text-white"
+                              : "text-neutral-400 hover:bg-white/5 hover:text-white",
+                          )}
+                        >
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>luminal</span>
+                          {activePreview === "luminal" && (
+                            <Check className="w-3 h-3 ml-auto text-[#d4a373]" />
+                          )}
+                        </button>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -371,6 +405,23 @@ export function Hero() {
                     src="/preview/terminal"
                     className="w-full h-full border-none"
                     title="Terminal Portfolio"
+                  />
+                </motion.div>
+
+                {/* Luminal Template */}
+                <motion.div
+                  animate={{
+                    opacity: activePreview === "luminal" ? 1 : 0,
+                    zIndex: activePreview === "luminal" ? 10 : 0,
+                    scale: activePreview === "luminal" ? 1 : 0.98,
+                  }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute inset-x-0 bottom-0 top-10 bg-[#050505]"
+                >
+                  <iframe
+                    src="/preview/luminal"
+                    className="w-full h-full border-none"
+                    title="Luminal Portfolio"
                   />
                 </motion.div>
               </div>

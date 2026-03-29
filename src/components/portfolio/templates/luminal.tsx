@@ -421,7 +421,8 @@ export function LuminalTemplate({
 
   const toggleTheme = () => {
     if (typeof window !== "undefined") {
-      const isCurrentlyDark = document.documentElement.classList.contains("dark");
+      const isCurrentlyDark =
+        document.documentElement.classList.contains("dark");
       if (isCurrentlyDark) {
         document.documentElement.classList.remove("dark");
         localStorage.setItem("luminal-theme", "light");
@@ -896,7 +897,7 @@ export function LuminalTemplate({
 
             <footer className="flex flex-col items-center justify-center gap-3 text-sm text-neutral-500 font-mono">
               <p className="italic tracking-tight">
-                &quot;Nothing Is Perfect — But You Can Make It Better.&quot;
+                &quot;Imperfect. Improving. Always.&quot;
               </p>
             </footer>
           </section>
