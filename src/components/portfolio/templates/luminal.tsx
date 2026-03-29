@@ -12,10 +12,11 @@ import {
   Mail,
   Download,
   ArrowUpRight,
-  Package,
   Briefcase,
   Linkedin,
   Globe,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { ActivityCalendar } from "react-activity-calendar";
 import { useSession } from "@/lib/auth-client";
@@ -212,7 +213,7 @@ const RealHeatmap = ({ username }: { username?: string }) => {
   }
 
   return (
-    <div className="w-full flex p-3 lg:p-4 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-500 dark:hover:border-neutral-600 transition-colors overflow-x-auto thin-scrollbar rounded-none">
+    <div className="w-full flex p-3 lg:p-4 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-500 dark:hover:border-neutral-600 transition-colors overflow-x-auto thin-scrollbar rounded-none">
       {loading ? (
         <div className="h-24 w-full flex items-center justify-center text-xs text-neutral-500 animate-pulse">
           Loading contributions...
@@ -417,6 +418,20 @@ export function LuminalTemplate({
   isLoggedIn = false,
 }: PortfolioTemplateProps) {
   const { data: session } = useSession();
+
+  const toggleTheme = () => {
+    if (typeof window !== "undefined") {
+      const isCurrentlyDark = document.documentElement.classList.contains("dark");
+      if (isCurrentlyDark) {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("luminal-theme", "light");
+      } else {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("luminal-theme", "dark");
+      }
+    }
+  };
+
   const mergedPortfolio = isPreview
     ? { ...dummyPortfolio, ...portfolio }
     : portfolio;
@@ -450,6 +465,31 @@ export function LuminalTemplate({
       `,
         }}
       />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            try {
+              if (localStorage.getItem("luminal-theme") === "light") {
+                document.documentElement.classList.remove("dark");
+              } else {
+                document.documentElement.classList.add("dark");
+              }
+            } catch (_) {}
+          `,
+        }}
+      />
+
+      {/* Preview Edit/Create Button */}
+      {isPreview && (
+        <div className="fixed bottom-6 right-6 z-99">
+          <Link href={isLoggedIn ? "/dashboard" : "/"}>
+            <button className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-[#111] border-2 border-dashed border-neutral-400 dark:border-neutral-700 hover:border-neutral-600 dark:hover:border-neutral-500 text-sm font-bold text-neutral-900 dark:text-white transition-all rounded-none shadow-xl hover:-translate-y-1 duration-300">
+              {isLoggedIn ? "Edit Portfolio" : "Create Your Own"}
+            </button>
+          </Link>
+        </div>
+      )}
+
       <div className="min-h-screen w-full bg-white dark:bg-[#0a0a0a] text-neutral-900 dark:text-neutral-100 font-figtree transition-colors duration-300 selection:bg-neutral-200 dark:selection:bg-neutral-800 relative">
         <ClickBurst />
 
@@ -457,7 +497,7 @@ export function LuminalTemplate({
         <div className="mx-auto w-[92%] md:w-full max-w-[800px] py-10 md:py-14 flex flex-col gap-9">
           {/* Profile Header */}
           <section className="flex flex-col md:flex-row gap-6 items-start">
-            <div className="relative group w-28 h-28 md:w-36 md:h-36 shrink-0 border-2 border-dashed border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors rounded-none overflow-hidden shadow-sm bg-white dark:bg-[#111]">
+            <div className="relative group w-28 h-28 md:w-36 md:h-36 shrink-0 border-2 border-dashed border-neutral-400 dark:border-neutral-700 hover:border-neutral-600 dark:hover:border-neutral-500 transition-colors rounded-none overflow-hidden shadow-sm bg-white dark:bg-[#111]">
               <CyberAvatarPlaceholder />
               {avatarImage && (
                 <img
@@ -469,9 +509,26 @@ export function LuminalTemplate({
             </div>
 
             <div className="flex flex-col gap-1.5 pt-1">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-                {fullName} <span className="text-red-500">🚀</span>
-              </h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+                  {fullName} <span className="text-red-500">🚀</span>
+                </h1>
+
+                {/* Theme Toggle (Stateless & Immediate) */}
+                <button
+                  onClick={toggleTheme}
+                  className="relative w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full border-2 border-dashed border-neutral-400 dark:border-neutral-700 hover:border-neutral-600 dark:hover:border-neutral-500 bg-neutral-100 dark:bg-[#111] overflow-hidden transition-colors shadow-sm focus:outline-none flex items-center justify-center group"
+                  title="Toggle theme"
+                  aria-label="Toggle theme"
+                >
+                  <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                    {/* Using Tailwind dark: variant mapping */}
+                    <Sun className="absolute w-5 h-5 md:w-6 md:h-6 text-neutral-800 transition-all duration-500 transform rotate-0 scale-100 dark:-rotate-90 dark:scale-0" />
+                    <Moon className="absolute w-5 h-5 md:w-6 md:h-6 text-neutral-200 transition-all duration-500 transform rotate-90 scale-0 dark:rotate-0 dark:scale-100" />
+                  </div>
+                </button>
+              </div>
+
               {username && (
                 <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
                   @{username}
@@ -511,7 +568,7 @@ export function LuminalTemplate({
                 href={socialLinks.twitter}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5 px-4 py-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none text-sm font-bold bg-white dark:bg-[#111]"
+                className="flex items-center gap-1.5 px-4 py-2 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-600 dark:hover:border-neutral-600 transition-colors rounded-none text-sm font-bold bg-white dark:bg-[#111]"
               >
                 <Twitter className="w-4 h-4" /> Twitter / X
               </a>
@@ -522,7 +579,7 @@ export function LuminalTemplate({
                 href={socialLinks.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-1.5 px-4 py-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none text-sm font-bold bg-white dark:bg-[#111]"
+                className="flex items-center gap-1.5 px-4 py-2 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-600 dark:hover:border-neutral-600 transition-colors rounded-none text-sm font-bold bg-white dark:bg-[#111]"
               >
                 <Linkedin className="w-3.5 h-3.5" /> LinkedIn
               </a>
@@ -537,7 +594,7 @@ export function LuminalTemplate({
                 )}
                 <a
                   href={"mailto:" + socialLinks.email}
-                  className="flex items-center gap-1.5 px-4 py-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none text-sm font-bold bg-white dark:bg-[#111]"
+                  className="flex items-center gap-1.5 px-4 py-2 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-600 dark:hover:border-neutral-600 transition-colors rounded-none text-sm font-bold bg-white dark:bg-[#111]"
                 >
                   <Mail className="w-4 h-4" /> Email Me
                 </a>
@@ -551,7 +608,7 @@ export function LuminalTemplate({
                 href={socialLinks.github}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-center p-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none bg-white dark:bg-[#111]"
+                className="flex items-center justify-center p-2 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-600 dark:hover:border-neutral-600 transition-colors rounded-none bg-white dark:bg-[#111]"
                 title="GitHub"
               >
                 <Github className="w-4 h-4" />
@@ -562,7 +619,7 @@ export function LuminalTemplate({
                 href={socialLinks.website}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-center p-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none bg-white dark:bg-[#111]"
+                className="flex items-center justify-center p-2 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-600 dark:hover:border-neutral-600 transition-colors rounded-none bg-white dark:bg-[#111]"
                 title="Personal Website"
               >
                 <Globe className="w-4 h-4" />
@@ -573,7 +630,7 @@ export function LuminalTemplate({
                 href={socialLinks.resume}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center justify-center p-2 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none bg-white dark:bg-[#111]"
+                className="flex items-center justify-center p-2 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-600 dark:hover:border-neutral-600 transition-colors rounded-none bg-white dark:bg-[#111]"
                 title="Download Resume"
               >
                 <Download className="w-4 h-4" />
@@ -653,10 +710,10 @@ export function LuminalTemplate({
                 {experience.map((exp: any) => (
                   <div
                     key={exp.id}
-                    className="p-4 md:p-5 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none flex flex-col md:flex-row justify-between gap-4"
+                    className="p-4 md:p-5 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-600 dark:hover:border-neutral-600 transition-colors rounded-none flex flex-col md:flex-row justify-between gap-4"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 bg-white dark:bg-[#111] rounded-none flex items-center justify-center shrink-0 border-2 border-dashed border-neutral-300 dark:border-neutral-800">
+                      <div className="w-10 h-10 bg-white dark:bg-[#111] rounded-none flex items-center justify-center shrink-0 border-2 border-dashed border-neutral-400 dark:border-neutral-800">
                         <Briefcase className="w-4 h-4" />
                       </div>
                       <div>
@@ -701,7 +758,7 @@ export function LuminalTemplate({
                   return (
                     <div
                       key={proj.id}
-                      className={`group p-4 md:p-5 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none flex flex-col md:flex-row gap-5 md:gap-7 bg-white dark:bg-[#0c0c0c] relative overflow-hidden`}
+                      className={`group p-4 md:p-5 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-600 dark:hover:border-neutral-600 transition-colors rounded-none flex flex-col md:flex-row gap-5 md:gap-7 bg-white dark:bg-[#0c0c0c] relative overflow-hidden`}
                     >
                       {/* Premium card glow accent */}
                       <div
@@ -709,7 +766,7 @@ export function LuminalTemplate({
                       />
 
                       {/* Image / Cover */}
-                      <div className="w-full md:w-[42%] lg:w-[38%] aspect-video md:aspect-16/10 bg-neutral-100 dark:bg-[#0c0c0c] rounded-none overflow-hidden shrink-0 border-2 border-neutral-200 dark:border-neutral-800 relative">
+                      <div className="w-full md:w-[42%] lg:w-[38%] aspect-video md:aspect-16/10 bg-neutral-100 dark:bg-[#0c0c0c] rounded-none overflow-hidden shrink-0 border-2 border-neutral-400 dark:border-neutral-800 relative">
                         <CoolProjectPlaceholder
                           index={index}
                           title={proj.title}
@@ -728,7 +785,7 @@ export function LuminalTemplate({
                                 href={proj.live}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1 border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#111] hover:bg-neutral-50 dark:hover:bg-[#1a1a1a] text-[13px] font-bold transition-colors rounded-none shadow-sm"
+                                className="flex items-center gap-1.5 px-3 py-1 border border-neutral-400 dark:border-neutral-700 bg-white dark:bg-[#111] hover:bg-neutral-50 dark:hover:bg-[#1a1a1a] text-[13px] font-bold transition-colors rounded-none shadow-sm"
                               >
                                 <ArrowUpRight className="w-3.5 h-3.5" /> Live
                               </a>
@@ -738,7 +795,7 @@ export function LuminalTemplate({
                                 href={proj.github}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="flex items-center gap-1.5 px-3 py-1 border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#111] hover:bg-neutral-50 dark:hover:bg-[#1a1a1a] text-[13px] font-bold transition-colors rounded-none shadow-sm"
+                                className="flex items-center gap-1.5 px-3 py-1 border border-neutral-400 dark:border-neutral-700 bg-white dark:bg-[#111] hover:bg-neutral-50 dark:hover:bg-[#1a1a1a] text-[13px] font-bold transition-colors rounded-none shadow-sm"
                               >
                                 <Github className="w-3.5 h-3.5" /> GitHub
                               </a>
@@ -750,7 +807,7 @@ export function LuminalTemplate({
                           {proj.description}
                         </p>
 
-                        <div className="mt-auto pt-3 border-t-2 border-dashed border-neutral-300 dark:border-neutral-800">
+                        <div className="mt-auto pt-3 border-t-2 border-dashed border-neutral-400 dark:border-neutral-800">
                           <p className="text-[14px] font-bold mb-2 tracking-wide text-neutral-800 dark:text-neutral-200">
                             Technologies Used:
                           </p>
@@ -758,7 +815,7 @@ export function LuminalTemplate({
                             {proj.tags?.map((tag: string) => (
                               <span
                                 key={tag}
-                                className="px-2 py-1 bg-neutral-100 dark:bg-[#111] shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)] border border-neutral-200 dark:border-neutral-800 rounded-sm text-[12px] font-bold text-neutral-800 dark:text-neutral-200"
+                                className="px-2 py-1 bg-neutral-100 dark:bg-[#111] shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)] border border-neutral-400 dark:border-neutral-800 rounded-sm text-[12px] font-bold text-neutral-800 dark:text-neutral-200"
                               >
                                 {tag}
                               </span>
@@ -775,7 +832,7 @@ export function LuminalTemplate({
 
           {/* Let's Connect / Footer */}
           <section className="flex flex-col gap-6 mt-2">
-            <div className="py-12 md:py-16 border-2 border-dashed border-neutral-300 dark:border-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors rounded-none flex flex-col items-center gap-6 px-4">
+            <div className="py-12 md:py-16 border-2 border-dashed border-neutral-400 dark:border-neutral-800 hover:border-neutral-600 dark:hover:border-neutral-600 transition-colors rounded-none flex flex-col items-center gap-6 px-4">
               <div className="text-center">
                 <h2 className="text-2xl md:text-3xl font-bold mb-2">
                   Let&apos;s Connect
@@ -789,7 +846,7 @@ export function LuminalTemplate({
                 {socialLinks?.email && (
                   <a
                     href={"mailto:" + socialLinks.email}
-                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-400 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
                   >
                     <Mail className="w-4 h-4" /> Email
                   </a>
@@ -799,7 +856,7 @@ export function LuminalTemplate({
                     href={socialLinks.twitter}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-400 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
                   >
                     <Twitter className="w-4 h-4" /> Twitter
                   </a>
@@ -809,7 +866,7 @@ export function LuminalTemplate({
                     href={socialLinks.github}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-400 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
                   >
                     <Github className="w-4 h-4" /> GitHub
                   </a>
@@ -819,7 +876,7 @@ export function LuminalTemplate({
                     href={socialLinks.resume}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-400 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
                   >
                     <Download className="w-4 h-4" /> Resume
                   </a>
@@ -829,7 +886,7 @@ export function LuminalTemplate({
                     href={socialLinks.linkedin}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-200 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-[#111] border border-neutral-400 dark:border-neutral-800 rounded-none text-sm md:text-[15px] font-bold hover:-translate-y-1 transition-transform shadow-sm"
                   >
                     <span className="font-bold text-base">in</span> LinkedIn
                   </a>
