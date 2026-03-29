@@ -163,13 +163,10 @@ const AtomIcon = ({ color }: { color: string }) => {
 
 // InteractiveLogo Component
 const InteractiveLogo = ({ name }: { name: string }) => {
-  const [colors, setColors] = useState<string[]>([]);
   const firstName = name.split(" ")[0] || "Portfolio";
-
-  // Initialize colors
-  useEffect(() => {
-    setColors(new Array(firstName.length).fill("text-white"));
-  }, [firstName]);
+  const [colors, setColors] = useState<string[]>(() =>
+    new Array(firstName.length).fill("text-white")
+  );
 
   const cycleColor = (index: number) => {
     const palette = [

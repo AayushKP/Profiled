@@ -1,5 +1,4 @@
 import { Portfolio } from "@/db/schema";
-import { CheckCircle2, Circle } from "lucide-react";
 
 export type SectionCompletion = {
   id: string;

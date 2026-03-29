@@ -18,7 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Trophy,
-  CheckCircle2,
+  CircleCheck,
   LogOut,
 } from "lucide-react";
 import { useState } from "react";
@@ -228,7 +228,7 @@ export function Sidebar({
                     <>
                       <span>{item.name}</span>
                       {isCompleted && item.id !== "templates" && (
-                        <CheckCircle2 className="ml-auto h-3.5 w-3.5 text-green-500/80" />
+                        <CircleCheck className="ml-auto h-3.5 w-3.5 text-green-500/80" />
                       )}
                     </>
                   )}

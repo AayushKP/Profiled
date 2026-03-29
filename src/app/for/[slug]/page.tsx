@@ -6,7 +6,7 @@ import { CTA } from "@/components/landing/cta";
 import { Features } from "@/components/landing/features";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CircleCheck } from "lucide-react";
 
 // PSEO Data: Roles to target
 const ROLES = {
@@ -154,7 +154,7 @@ export default async function RolePage({ params }: Props) {
                 className="p-8 rounded-2xl bg-[#0A0A0A] border border-white/10 hover:border-white/20 transition-colors"
               >
                 <div className="h-12 w-12 rounded-full bg-white/5 flex items-center justify-center mb-6">
-                  <CheckCircle2 className="h-6 w-6 text-white" />
+                  <CircleCheck className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">
                   {feature}

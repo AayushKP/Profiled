@@ -201,7 +201,7 @@ const HELP_DATA: HelpNode[] = [
         answer: () => (
           <span>
             Go to the <strong>Templates</strong> tab in the sidebar and scroll
-            down to the "Danger Zone".
+            down to the &quot;Danger Zone&quot;.
             <br />
             Click <strong>Delete Portfolio</strong> to permanently remove your
             site and data.
@@ -236,7 +236,18 @@ export function AtlasBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [history, setHistory] = useState<
     { type: "bot" | "user"; content: React.ReactNode }[]
-  >([]);
+  >([
+    {
+      type: "bot",
+      content: (
+        <>
+          Hi, I&apos;m <strong>Atlas</strong>.
+          <br />I can help you build and manage your portfolio. What do you
+          need help with?
+        </>
+      ),
+    },
+  ]);
   const [currentMenu, setCurrentMenu] = useState<HelpNode[]>(HELP_DATA);
   const [breadcrumbs, setBreadcrumbs] = useState<HelpNode[][]>([]);
   const [deviceType, setDeviceType] = useState<DeviceType>("desktop");
@@ -252,24 +263,6 @@ export function AtlasBot() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  // Initialize Chat
-  useEffect(() => {
-    if (history.length === 0) {
-      setHistory([
-        {
-          type: "bot",
-          content: (
-            <>
-              Hi, I'm <strong>Atlas</strong>.
-              <br />I can help you build and manage your portfolio. What do you
-              need help with?
-            </>
-          ),
-        },
-      ]);
-    }
-  }, [history.length]);
 
   // Auto-scroll
   useEffect(() => {
@@ -318,7 +311,7 @@ export function AtlasBot() {
         type: "bot",
         content: (
           <>
-            Hi, I'm <strong>Atlas</strong>.
+            Hi, I&apos;m <strong>Atlas</strong>.
             <br />I can help you build and manage your portfolio. What do you
             need help with?
           </>
