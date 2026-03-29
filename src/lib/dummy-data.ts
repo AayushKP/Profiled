@@ -3,6 +3,8 @@ import type { Portfolio } from "@/db/schema";
 // Dummy data for demo preview
 export const dummyPortfolio: Partial<Portfolio> = {
   fullName: "Aayush Kashyap",
+  profileImage:
+    "https://res.cloudinary.com/aayush5183/image/upload/v1733479544/communique/profile-images/trdnqosxieobfxeus9cb.jpg",
   title: "Software Engineer",
   tagline:
     "Specializing in full-stack web development, cloud deployment, and AI-driven automation.",
