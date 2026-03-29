@@ -286,16 +286,32 @@ const CyberAvatarPlaceholder = () => (
           "repeating-linear-gradient(-45deg, #1a1a1a, #1a1a1a 1px, transparent 1px, transparent 6px)",
       }}
     />
-    
+
     {/* Soft central glow */}
     <div className="absolute inset-0 bg-linear-to-br from-neutral-500/10 to-transparent opacity-40 z-0" />
     <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.9)] z-0" />
 
     {/* Abstract Premium Human Silhouette */}
     <div className="relative z-10 w-12 h-12 md:w-16 md:h-16 opacity-70 group-hover:opacity-100 transition-opacity duration-500">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-neutral-300 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]">
-        <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" strokeWidth="1" strokeLinecap="square" />
-        <path d="M20.59 22C20.59 18.13 16.74 15 12 15C7.26 15 3.41 18.13 3.41 22" stroke="currentColor" strokeWidth="1" strokeLinecap="square" strokeDasharray="2 2" />
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full text-neutral-300 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]"
+      >
+        <path
+          d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
+          stroke="currentColor"
+          strokeWidth="1"
+          strokeLinecap="square"
+        />
+        <path
+          d="M20.59 22C20.59 18.13 16.74 15 12 15C7.26 15 3.41 18.13 3.41 22"
+          stroke="currentColor"
+          strokeWidth="1"
+          strokeLinecap="square"
+          strokeDasharray="2 2"
+        />
       </svg>
       {/* Glitch/Scan overlays */}
       <div className="absolute inset-0 bg-white/5 animate-pulse mix-blend-overlay" />
@@ -666,9 +682,10 @@ export function LuminalTemplate({
                 ))}
               </div>
 
-              {socialLinks?.github && mergedPortfolio.showGithubHeatmap !== false && (
-                <RealHeatmap username={socialLinks.github} />
-              )}
+              {socialLinks?.github &&
+                mergedPortfolio.showGithubHeatmap !== false && (
+                  <RealHeatmap username={socialLinks.github} />
+                )}
             </section>
           )}
 

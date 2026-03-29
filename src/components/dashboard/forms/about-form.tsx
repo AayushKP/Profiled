@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { motion } from "framer-motion";
 import type { Portfolio } from "@/db/schema";
 
 interface AboutFormProps {
@@ -13,6 +14,7 @@ interface AboutFormProps {
 
 export function AboutForm({ portfolio, onUpdate }: AboutFormProps) {
   const [bio, setBio] = useState(portfolio.bio || "");
+  const [location, setLocation] = useState(portfolio.location || "");
   const maxBioLength = 2000;
 
   return (
@@ -52,6 +54,21 @@ export function AboutForm({ portfolio, onUpdate }: AboutFormProps) {
             {bio.length}/{maxBioLength}
           </span>
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label>Location</Label>
+        <Input
+          value={location}
+          onChange={(e) => {
+            setLocation(e.target.value);
+            onUpdate({ location: e.target.value });
+          }}
+          placeholder="San Francisco, CA (or Remote)"
+        />
+        <p className="text-xs text-gray-500">
+          City, State, Country, or "Remote"
+        </p>
       </div>
 
       {/* Tips */}

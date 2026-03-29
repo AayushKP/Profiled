@@ -116,6 +116,7 @@ export const portfolio = pgTable("portfolio", {
   profileImage: text("profile_image"),
   title: text("title"),
   tagline: text("tagline"),
+  location: text("location"),
   bio: text("bio"),
   skills: json("skills").$type<string[]>().default([]),
   projects: json("projects").$type<ProjectData[]>().default([]),

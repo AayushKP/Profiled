@@ -80,6 +80,7 @@ export const portfolioSchema = z.object({
   tagline: sanitizedString
     .pipe(z.string().max(200, "Tagline must be less than 200 characters"))
     .optional(),
+  location: sanitizedString.optional(),
   bio: sanitizedString
     .pipe(z.string().max(2000, "Bio must be less than 2000 characters"))
     .optional(),
